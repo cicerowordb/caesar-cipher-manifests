@@ -8,7 +8,8 @@ metadata:
 spec:
   type: ClusterIP
   externalIPs:
-  - 172.22.185.230
+  - 172.22.185.230 # my local wsl
+  - 172.31.62.143  # my AWS instance
   ports:
   - protocol: TCP
     port: 5001

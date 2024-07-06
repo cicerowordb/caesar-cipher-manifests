@@ -46,3 +46,5 @@ O código é então verificado a partir da branch que acionou a ação. O pipeli
 ### Problemas conhecidos
 
 A opção `--insecure-skip-tls-verify` é usada com o kubectl para instruir a ferramenta a ignorar a verificação dos certificados TLS. Isso é necessário porque a instalação do K3S usa os IPs privados e de loopback no certificado (por padrão) e estamos usando o IP público para acessar a API. Para evitar etapas adicionais explicando como substituir o certificado da API do K3S, estamos simplesmente ignorando problemas de certificado.
+
+A maneira mais fácil de expor um serviço para acesso externo é usando externalIPs dentro de um serviço. Não se esqueça de usar o IP correto no seu ambiente. Use o IP privado da instância.
