@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caesar-cipher
+  labels:
+    app: caesar-cipher
+    version: 0.0.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caesar-cipher
+      version: 0.0.0
+  template:
+    metadata:
+      labels:
+        app: caesar-cipher
+        version: 0.0.0
+    spec:
+      containers:
+      - name: caesar-cipher
+        image: cicerow/caesar-cipher:0.0.0
+        ports:
+        - containerPort: 5000
+      imagePullSecrets:
+      # Create this secret mannually in you cluster before apply
+      - name: my-docker-credentials

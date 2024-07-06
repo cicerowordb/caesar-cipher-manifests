@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: caesar-cipher
+  labels:
+    app: caesar-cipher
+    version: 0.0.0
+spec:
+  type: ClusterIP
+  externalIPs:
+  - 172.22.185.230
+  ports:
+  - protocol: TCP
+    port: 5001
+    targetPort: 5000
+  selector:
+    app: caesar-cipher

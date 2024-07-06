@@ -1,0 +1,42 @@
+name: CD  Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Install Kubectl
+        run: |
+          KUBECTL_VERSION='1.24.9'
+          curl -LO "https://dl.k8s.io/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl" > /dev/null 2> /dev/null
+          sudo chmod +x kubectl
+          sudo mv kubectl /usr/local/bin
+
+      - name: Export KubeConfig to a file
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          mkdir ~/.kube || :
+          echo $KUBE_CONFIG > ~/.kube/config
+          cat ~/.kube/config
+
+      - name: Checkout code from triggered branch
+        uses: actions/checkout@v3
+
+      - name: Test configuration (local)
+        run: ls -la && kubectl apply --insecure-skip-tls-verify --dry-run=client -o yaml -f .
+
+      - name: Test configuration (remote)
+        run: kubectl apply --insecure-skip-tls-verify --dry-run=server -o yaml -f .
+
+      - name: Apply configuration
+        run: kubectl apply --insecure-skip-tls-verify -f .
