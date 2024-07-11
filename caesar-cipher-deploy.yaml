@@ -4,7 +4,7 @@ metadata:
   name: caesar-cipher
   labels:
     app: caesar-cipher
-    version: 0.0.1-run1
+    version: 0.0.2-run2
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: caesar-cipher
-        image: cicerow/caesar-cipher:0.0.1-run1
+        image: cicerow/caesar-cipher:0.0.2-run2
         ports:
         - containerPort: 5000
       imagePullSecrets:

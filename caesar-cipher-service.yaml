@@ -4,7 +4,7 @@ metadata:
   name: caesar-cipher
   labels:
     app: caesar-cipher
-    version: 0.0.1-run1
+    version: 0.0.2-run2
 spec:
   type: ClusterIP
   externalIPs:
