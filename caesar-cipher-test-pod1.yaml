@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: caesar-cipher-test-curl-pod1
+  namespace: cipher-ns
+  labels:
+    app: caesar-cipher-test-curl-pod1
+    version: 0.0.2-run2
+spec:
+  containers:
+  - name: caesar-cipher-test-curl-pod1
+    image: curlimages/curl
+    command: ["/bin/sh"]
+    args:
+    - -c
+    - |
+      while true; do
+        date +'%Y/%m/%d %H:%M:%S'
+
+        echo ---- Correct access ----
+        curl -sSi -X POST http://caesar-cipher.cipher-ns.svc.cluster.local:5001/ -H 'Content-Type: application/x-www-form-urlencoded' -d 'text=Hello&shift=3' | grep -E '(HTTP/1.1 200 OK|Encrypted Text: Khoor)'
+        echo
+
+        echo ---- Missing parameter ----
+        curl -sSi -X POST http://caesar-cipher.cipher-ns.svc.cluster.local:5001/ -H 'Content-Type: application/x-www-form-urlencoded' -d 'text=Hello' | grep 'HTTP/1.1 200 OK'
+        echo
+
+        echo ---- Invalid parameter ----
+        curl -sSi -X POST http://caesar-cipher.cipher-ns.svc.cluster.local:5001/ -H 'Content-Type: application/x-www-form-urlencoded' -d 'text=Hello&shift=abc' | grep -E '(HTTP/1.1 200 OK|ERROR: Shift must be an integer.)'
+        echo
+
+        echo ---- Invalid HTTP header ----
+        curl -sSi -X POST http://caesar-cipher.cipher-ns.svc.cluster.local:5001/ -H 'Content-Type: unknown/invalid' -d 'text=Hello&shift=3' | grep -E '(HTTP/1.1 200 OK|ERROR: Please fill out all fields.)'
+        echo
+
+        sleep 5
+      done
